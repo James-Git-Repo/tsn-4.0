@@ -1,0 +1,19 @@
+/* assets/global-responsive.css (FINAL minimal) */
+:root { --wrap:1120px; --gap:16px; --header-h:56px; }
+*{box-sizing:border-box} html,body{height:100%}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#0F172A;background:#fff;line-height:1.5}
+.wrap{width:100%;max-width:var(--wrap);margin:0 auto;padding:0 var(--gap)}
+.site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.2) blur(6px);border-bottom:1px solid #E2E8F0}
+.navbar{display:flex;align-items:center;gap:var(--gap);min-height:var(--header-h)}
+.nav-primary{margin-left:auto;display:flex;align-items:center;gap:14px}
+.nav-toggle{margin-left:auto;border:1px solid #CBD5E1;background:#fff;border-radius:12px;padding:8px 12px;cursor:pointer;display:none}
+@media (max-width:1023px){
+  .nav-toggle{display:inline-flex}
+  .nav-primary[hidden]{display:none!important}
+  .nav-primary{position:fixed;top:var(--header-h);right:var(--gap);left:var(--gap);display:block;background:#fff;border:1px solid #E2E8F0;border-radius:14px;box-shadow:0 10px 30px rgba(15,23,42,.12);padding:10px}
+  .nav-primary a{display:block;padding:12px 10px}
+}
+/* Editable outline only in editor */
+html[data-mode="editor"] .editable.edit-outline { outline:2px dashed #818CF8; outline-offset:2px; }
+/* IMPORTANT: blocks are only non-clickable IN EDITOR */
+html[data-mode="editor"] [data-view-block]{ pointer-events:none !important; }

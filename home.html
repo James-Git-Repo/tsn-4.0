@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en" data-mode="viewer">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="assets/global-responsive.css">
+<script defer src="assets/global-responsive.js"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet" href="assets/foundation.css">
+<link rel="stylesheet" href="assets/access-mode.css">
+<script defer src="assets/mode-compat.js"></script>
+<script defer src="assets/access-mode.js"></script>
+
+  <title>The (un)Stable Net — Home</title>
+  <meta name="description" content="The (un)Stable Net — projects, research, and a personal bio."/>
+
+  <style>
+    :root{
+      --page:#ffffff; --ink:#0b152c; --line:#e7edf7; --card:#ffffff;
+      --primary:#1f4aff; --accent:#00b7ff; --chip:#eef4ff; --maxw:1120px;
+      --shadow:0 10px 30px rgba(12,23,52,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:var(--page)}
+    header{position:sticky; top:0; z-index:40; backdrop-filter:saturate(140%) blur(8px); background:rgba(255,255,255,.9); border-bottom:1px solid var(--line)}
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px}
+    img, video { max-width:100%; height:auto; display:block }
+header .wrap{
+  margin-left: auto;   /* spinge a destra */
+  margin-right: auto;
+  /* in alternativa, con proprietà logiche:
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+  */
+}
+
+    .nav{height:72px; display:flex; align-items:center; justify-content:space-between}
+    .brand{display:flex; align-items:center; gap:12px}
+    .mark{width:36px; height:36px; border-radius:12px; display:grid; place-items:center; color:#fff; background:conic-gradient(from 210deg, var(--primary), var(--accent)); box-shadow:var(--shadow)}
+    nav{flex:1; margin-left:24px}
+    nav ul{display:flex; list-style:none; margin:0; padding:0; justify-content:space-evenly; gap:0}
+    nav a{color:#143166; font-weight:800; padding:10px 14px; border-radius:12px; text-decoration:none; border:1px solid #dbe6ff; background:#ffffff; box-shadow:0 1px 0 rgba(12,23,52,.04)}
+    nav a:hover{background:#f4f7ff; transform:translateY(-1px)}
+
+    /* HERO stays visible (gradient under animated canvas) */
+    .hero{position:relative; overflow:hidden; border-bottom:1px solid var(--line);
+          background:linear-gradient(180deg,#f7faff 0%,#ffffff 70%);}
+    canvas#net{position:absolute; inset:0; width:100%; height:100%; display:block;
+               background:linear-gradient(180deg,#f7faff 0%,#ffffff 70%)}
+    .hero .inner{position:relative; max-width:var(--maxw); margin:0 auto; padding:56px 20px 32px; color:#263659}
+    .title{font-size: clamp(34px, 5vw, 60px); line-height:1.05; margin:8px 0 8px; font-weight:800}
+    .subtitle{margin:0; color:#4c5c83; font-weight:600}
+    .chips{margin:16px 0 0; display:flex; gap:8px; flex-wrap:wrap}
+    .chip{background:var(--chip); border:1px solid #dbe6ff; color:#2140b8; padding:6px 12px; border-radius:999px; font-weight:800; font-size:12px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin:18px 0 0}
+    .btn{display:inline-flex; align-items:center; gap:10px; padding:12px 16px; border-radius:12px; font-weight:800; border:1px solid #dbe6ff; color:#143166; background:#fff; cursor:pointer}
+    .btn.primary{background:linear-gradient(135deg, var(--primary), var(--accent)); color:#ffffff; border-color:transparent}
+    .btn.small{padding:8px 12px; font-weight:700}
+/* Home: card sempre cliccabile su tutta la superficie */
+a.card{
+  display:block;
+  position:relative;
+  cursor:pointer;
+  text-decoration:none;
+  isolation:isolate;
+}
+a.card *{ pointer-events:none; }              /* click passa all'anchor */
+a.card [data-allow-interact]{ pointer-events:auto; }
+a.card::before, a.card::after{ pointer-events:none !important; }
+   /* opzionale, contro overlay esterni */
+.grid{ position:relative; z-index:1; } 
+
+/* Sicurezza contro overlay del viewer/editor */
+html[data-mode="editor"] html[data-mode="editor"] [data-view-block]{ pointer-events:none !important; }
+
+    .newsletter{margin:22px 0 10px}
+    .nl-card{background:#f3f7ff; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:16px 16px; display:grid; grid-template-columns: 1.2fr .8fr; gap:12px}
+    .nl-input{padding:12px 12px; border-radius:10px; border:1px solid #cfe0ff; min-width:260px; font:inherit}
+
+    section.projects{padding:26px 0}
+    .section-head{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px}
+    .section-title{font-weight:800}
+    .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:16px }
+    .card{position:relative; background:var(--card); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); overflow:hidden; transition:transform .2s ease}
+    .card:hover{transform:translateY(-2px)}
+    .cover{width:100%; aspect-ratio:16/9; background:#1b2550; background-size:cover; background-position:center; border-bottom:1px solid var(--line); cursor:pointer}
+    .inner{padding:16px}
+    .tag{display:inline-flex; padding:6px 10px; border-radius:999px; background:#eef4ff; border:1px solid #dbe6ff; color:#2140b8; font-weight:800; font-size:12px}
+    .ghost{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:10px; border:1px solid #dbe6ff; background:#fff; color:#18306b; font-weight:700}
+
+    dialog{border:0; padding:0; border-radius:16px; overflow:hidden; width:min(720px, 94vw);
+           box-shadow:0 20px 60px rgba(12,23,52,.20), 0 2px 10px rgba(12,23,52,.08)}
+    dialog::backdrop{ background:rgba(11,21,44,.55) }
+    .dialog-head{ padding:14px 16px; font-weight:800; background:#f7faff; border-bottom:1px solid #e7edf7 }
+    .dialog-body{ padding:16px; background:linear-gradient(180deg,#0b152c 0%, #11224a 50%, #0b152c 100%) }
+    .dialog-foot{ padding:12px 16px; background:#f7faff; border-top:1px solid #e7edf7; display:flex; justify-content:space-between }
+    .dialog-body form{ display:grid; gap:12px }
+    .dialog-body input, .dialog-body textarea{ width:100%; padding:12px; border-radius:12px; border:2px solid #0b152c; background:white; color:#0b152c; font:inherit }
+
+    [contenteditable="true"]{ outline:1.5px dashed rgba(16,185,129,.7); outline-offset:3px; border-radius:8px }
+
+    .about-block{ margin-left:auto; max-width:520px; padding-left:24px }
+    .about-label{ display:block; font-weight:800; color:#526189; margin-bottom:4px; text-align:right }
+    .about-text{ font-size:14px; line-height:1.55; margin:0; text-align:justify; text-justify:inter-word; text-align-last:right }
+    @media (max-width:780px){
+      .about-block{ max-width:100%; padding-left:0 }
+      .about-label{ text-align:center }
+      .about-text{ text-align:justify; text-align-last:auto }
+    }
+
+    footer{border-top:1px solid var(--line); padding:18px 0; color:#6b7897}
+    footer a{color:#2140b8; text-decoration:none; font-weight:700}
+    footer a:hover{text-decoration:underline}
+    .ft-wrap{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap}
+    .ft-input{padding:10px 12px; border-radius:10px; border:1px solid #cfe0ff; font:inherit; min-width:140px}
+    .ft-btn{padding:10px 14px; border-radius:10px; border:1px solid #dbe6ff; background:#fff; font-weight:800; cursor:pointer}
+    footer .ft-btn{color:#0c2a9c}
+    .fab{position:fixed; right:16px; bottom:16px; z-index:60; box-shadow:var(--shadow)}
+    .customize{position:fixed; right:16px; bottom:76px; z-index:60; width:min(420px,92vw); background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:14px}
+    .customize h3{margin:0 0 8px}
+    .row{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:8px 0}
+    .mini{font-size:12px; color:#526189}
+    .hidden{display:none}
+/* ensure cards remain clickable in “viewer/locked” mode */
+a.card[data-view-allowed] { pointer-events:auto !important; }
+    @media (max-width: 780px){
+      .grid{grid-template-columns:1fr}
+      nav{flex:unset; margin-left:0}
+      nav ul{justify-content:center; gap:12px; flex-wrap:wrap}
+      .nl-card{grid-template-columns:1fr}
+    }
+    /* --- Responsive core (home) --- */
+:root{ --space: clamp(12px, 2vw, 20px); --col-gap: clamp(12px, 1.6vw, 16px); }
+.wrap{ padding: 0 var(--space); }
+img, video{ max-width:100%; height:auto; }
+button, .btn, .pill-btn{ min-height:44px; }
+
+/* Mobile-friendly dialogs */
+dialog{
+  width:min(860px, calc(100dvw - 32px));
+  max-height:calc(100dvh - 32px);
+  overflow:hidden;
+  border-radius:16px;
+}
+.dialog-body{ overflow:auto; }
+
+  </style>
+  <style id="nav-fallback">
+/* Fallback: hamburger visibile solo <980px; menu a pannello */
+.nav-toggle{display:none;}
+@media (max-width:980px){
+  .nav-toggle{
+    display:inline-flex; appearance:none; border:1px solid #dbe6ff; background:#fff; color:#143166;
+    width:40px; height:40px; border-radius:10px; align-items:center; justify-content:center; cursor:pointer;
+  }
+  header nav{ position:static; margin-left:0; flex:unset; }
+  header nav ul{
+    position:absolute; right:16px; top:72px; display:none; flex-direction:column; gap:10px;
+    background:#fff; border:1px solid #e7edf7; border-radius:14px; padding:12px;
+    box-shadow:0 10px 30px rgba(12,23,52,.10); z-index:50; min-width:220px;
+  }
+  body.nav-open header nav ul{ display:flex; }
+  header nav a{ display:block; width:100%; text-align:left; min-height:44px; }
+}
+</style>
+
+  <link rel="stylesheet" href="assets/site-responsive.css">
+
+<script defer src="assets/ui-mode-toggle.js"></script>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand"><div class="mark" aria-hidden="true">TSN</div><h1><b>The (un)Stable Net</b></h1></div>
+      <button id="navToggle" class="nav-toggle" aria-controls="primaryNav" aria-expanded="false" data-view-allowed>
+      <span class="sr-only">Toggle navigation</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+      <nav id="primaryNav" aria-label="Primary">
+        <ul>
+          <li><a href="#projects" data-view-allowed>Projects</a></li>
+          <!-- FIX: relative link to avoid 404s on static hosts -->
+          <li><a id="navEmm" href="emm.html#latest" data-view-allowed>Newsletter</a></li>
+          <li><a href="bio.html" data-view-allowed>About me</a></li>
+        </ul>
+      </nav>
+      
+    </div>
+  </header>
+
+  <section class="hero">
+    <canvas id="net" aria-hidden="true"></canvas>
+    <div class="inner">
+      <h2 class="title">The (un)Stable Net</h2>
+      <p class="subtitle">A blog about Business, Tech, AI & Content</p>
+      <div class="chips"><span class="chip">Business</span><span class="chip">Tech</span><span class="chip">AI</span><span class="chip">Content</span></div>
+      <div class="newsletter" id="subscribe">
+        <div class="nl-card">
+          <div><strong>European Market Movers</strong><br/>A weekly, PM-style wrap of European markets: what moved, why it mattered, and what’s next.</div>
+          <form class="nl-form" onsubmit="event.preventDefault(); alert('Thanks! I\'ll keep you posted.');" data-view-allowed>
+            <input id="email" type="email" required class="nl-input" placeholder="info@example.com" data-view-allowed/>
+            <button class="btn primary" type="submit" data-view-allowed>Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section id="projects" class="projects" aria-labelledby="projects-title">
+      <div class="section-head">
+        <h2 id="projects-title" class="section-title">Projects</h2>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"></div>
+      </div>
+      <!-- Editor tools (nascosti in Viewer) -->
+<div class="only-editor" style="display:flex;gap:8px;align-items:center;margin:8px 0">
+  <input type="file" id="coverInput" accept="image/*">
+  <button id="saveCover" type="button">Imposta cover</button>
+</div>
+
+      <div class="grid" id="projectGrid"></div>
+    </section>
+  </main>
+
+  <!-- Inquiry dialog -->
+  <dialog id="inqDialog" data-to-email="jacopoberton98@gmail.com">
+    <div class="dialog-head">Question / Collaboration Inquiry</div>
+    <div class="dialog-body">
+      <form id="inqForm">
+        <input name="name" placeholder="Your name" required />
+        <input name="email" type="email" placeholder="Your email" required />
+        <input name="topic" placeholder="Topic (optional)" />
+        <textarea name="message" rows="6" placeholder="Your message" required></textarea>
+        <small style="color:#c7d2fe">On submit, your mail app opens with a pre-filled email to the contact address.</small>
+      </form>
+    </div>
+    <div class="dialog-foot">
+      <button class="ft-btn" id="closeInq" type="button">Close</button>
+      <button class="ft-btn" id="sendInq" type="button">Send</button>
+    </div>
+  </dialog>
+
+  <footer>
+    <div class="wrap ft-wrap">
+      <div>
+        <a href="https://www.linkedin.com/in/jacopo-berton-16a69424b/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;margin-right:10px;color:#2140b8">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M20.447 20.452h-3.554V14.75c0-1.357-.027-3.099-1.889-3.099-1.89 0-2.178 1.477-2.178 3.002v5.799H9.27V9h3.414v1.561h.047c.476-.9 1.637-1.849 3.37-1.849 3.601 0 4.266 2.37 4.266 5.455v6.285zM5.337 7.433a2.062 2.062 0 11.001-4.124 2.062 2.062 0 01-.001 4.124zM6.918 20.452H3.654V9h3.264v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="mailto:jacopoberton98@gmail.com" aria-label="Email" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;margin-right:10px">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M1.5 5.75A2.75 2.75 0 0 1 4.25 3h15.5A2.75 2.75 0 0 1 22.5 5.75v12.5A2.75 2.75 0 0 1 19.75 21H4.25A2.75 2.75 0 0 1 1.5 18.25V5.75zm2.75-.25a.25.25 0 0 0-.25.25v.17l7.5 5.01 7.5-5.01v-.17a.25.25 0 0 0-.25-.25H4.25zm15.5 2.64-7.14 4.77a.75.75 0 0 1-.82 0L3.65 8.14v10.11c0 .14.11.25.25.25h15.85c.14 0 .25-.11.25-.25V8.14z"/></svg>
+        </a>
+        <a href="https://github.com/James-Git-Repo" target="_blank" rel="noopener" aria-label="GitHub" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;margin-right:10px">
+          <img alt="" src="https://cdn.simpleicons.org/github/2140b8" width="22" height="22" loading="lazy">
+        </a>
+        <a href="https://x.com/your-handle" target="_blank" rel="noopener" aria-label="X" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px">
+          <img alt="" src="https://cdn.simpleicons.org/x/2140b8" width="22" height="22" loading="lazy">
+        </a>
+      </div>
+
+      <div class="about-block">
+        <span class="about-label">About</span>
+        <p class="about-text">I'm a Swiss–Italian analyst & builder focused on fintech & AI. With a curious and delivery-oriented mindset, I'm always down for a new challenge.</p>
+      </div>
+
+      <div class="wrap mini" style="margin-top:6px; display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; text-align:center;">
+        <span>© 2025 The (un)Stable Net</span>
+        <span aria-hidden="true">•</span>
+        <a href="/assets/legal/privacy-policy.pdf" target="_blank" rel="noopener noreferrer" class="hover:underline underline-offset-4">Privacy Policy (PDF)</a>
+        <span aria-hidden="true" class="hidden sm:inline">•</span>
+        <a href="/assets/legal/terms.pdf" target="_blank" rel="noopener noreferrer" class="hover:underline underline-offset-4">Terms &amp; Conditions (PDF)</a>
+      </div>
+    </div>
+  </footer>
+
+  <button id="openCustomizer" class="btn fab">✎ Customize</button>
+  <div id="customizePanel" class="customize hidden" role="dialog" aria-modal="true" aria-labelledby="czTitle">
+    <h3 id="czTitle">Quick Customize</h3>
+    <p class="mini">Set a bio photo and project covers (URL or upload). Saved in your browser.</p>
+    <div class="row">
+      <strong>Bio photo</strong>
+      <input class="ft-input" type="url" id="bioUrl" placeholder="https://…/photo.jpg" aria-label="Bio photo URL">
+      <input class="ft-input" type="file" id="bioFile" accept="image/*" aria-label="Upload bio photo">
+    </div>
+    <div id="projectInputs"></div>
+    <div class="row" style="justify-content:flex-end">
+      <button id="czReset" class="ft-btn" type="button">Reset</button>
+      <button id="czSave" class="ft-btn" type="button">Save</button>
+      <button id="czClose" class="ft-btn" type="button">Close</button>
+    </div>
+  </div>
+
+  <script>
+    /* sr-only util */
+    (function(){const s=document.createElement('style');s.textContent=`.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}`;document.head.appendChild(s)})();
+
+    /* hero net animation */
+    (function(){
+      const c=document.getElementById('net'); if(!c) return;
+      const x=c.getContext('2d'); const d=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+      let w,h,p=[]; const N=72; const R=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function r(a,b){return Math.random()*(b-a)+a}
+      function size(){w=c.clientWidth; h=c.clientHeight; c.width=w*d; c.height=h*d; x.setTransform(d,0,0,d,0,0)}
+      function reset(){p=Array.from({length:N},()=>({x:r(0,w),y:r(0,h),vx:r(-.3,.3),vy:r(-.2,.2)}))}
+      function step(){
+        x.clearRect(0,0,w,h);
+        const g=x.createLinearGradient(0,0,w,h);
+        g.addColorStop(0,'rgba(31,74,255,0.10)'); g.addColorStop(1,'rgba(0,183,255,0.08)');
+        x.fillStyle=g; x.fillRect(0,0,w,h);
+        for(let i=0;i<p.length;i++){
+          const a=p[i]; a.x+=a.vx; a.y+=a.vy; if(a.x<0||a.x>w)a.vx*=-1; if(a.y<0||a.y>h)a.vy*=-1;
+          x.beginPath(); x.arc(a.x,a.y,1.6,0,Math.PI*2); x.fillStyle='rgba(33,64,184,0.9)'; x.fill();
+          for(let j=i+1;j<p.length;j++){
+            const b=p[j],dx=a.x-b.x,dy=a.y-b.y,dst=Math.hypot(dx,dy);
+            if(dst<120){ x.strokeStyle=`rgba(100,150,255,${0.14*(1-dst/120)})`; x.lineWidth=1; x.beginPath(); x.moveTo(a.x,a.y); x.lineTo(b.x,b.y); x.stroke(); }
+          }
+        }
+        if(!R) requestAnimationFrame(step);
+      }
+      size(); reset(); step(); addEventListener('resize',size); if(R) step();
+    })();
+
+    const API_PROJECTS = 'api/projects.json';
+
+    /* Default projects (RELATIVE link for EMM to avoid 404s) */
+    const DEFAULTS = {
+      "projects": [
+        { "id":"msb", "title":"<b>Million Slots Billboard</b>", "tag":"Platform",
+          "blurb":"A permanent AI video mosaic with 1,000,000 micro-slots. Claim space and publish.",
+          "href":"msab.html", "cover":"" },
+        { "id":"emm", "title":"<b>European Market Movers</b>", "tag":"Newsletter",
+    "blurb":"Weekly, PM-style wrap of European markets.",
+    "href":"emm.html#latest", "cover":"" },
+        { "id":"coming", "title":"<b>New projects coming soon…</b>", "tag":"Coming up",
+          "blurb":"Stay tuned", "href":"project-new.html", "cover":"" }
+      ]
+    };
+
+    const grid = document.getElementById('projectGrid');
+    let DATA = DEFAULTS;
+
+    function genCover(title, tag){
+      const svg=`<?xml version="1.0"?><svg xmlns='http://www.w3.org/2000/svg' width='1200' height='675'>
+      <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='#1f4aff'/><stop offset='100%' stop-color='#00b7ff'/></linearGradient></defs>
+      <rect width='1200' height='675' fill='#0b1226'/><rect width='1200' height='675' fill='url(#g)' opacity='0.18'/>
+      <text x='40' y='80' fill='#dbe5ff' font-family='Inter,Arial' font-weight='700' font-size='42'>${(title||'Project').replace(/</g,'&lt;')}</text>
+      <text x='40' y='120' fill='#a9b7d9' font-family='Inter,Arial' font-size='24'>${(tag||'')}</text></svg>`;
+      return 'data:image/svg+xml;utf8,'+encodeURIComponent(svg);
+    }
+    function getCover(p){
+      const override = localStorage.getItem('project_cover_'+p.id);
+      return override || p.cover || genCover(p.title,p.tag);
+    }
+    function cardTemplate(p){
+  const cover = getCover(p);
+  const viewerAllowed = (p.id !== 'coming'); // keep "coming soon" disabled in Viewer
+  const allowAttr = viewerAllowed ? ' data-view-allowed' : '';
+  const href = (p.href || '').trim();
+  const clickable = href && viewerAllowed;
+
+  // Make the whole card an <a> when clickable; fallback to <article> when not.
+  if (clickable) {
+    return `
+      <a class="card"${allowAttr} href="${href}" role="link" tabindex="0" aria-label="${p.title||'Project'}">
+        <div class="cover"${allowAttr} style="background-image:url('${cover}')" title="${p.title||''}"></div>
+        <div class="inner"${allowAttr}>
+          <span class="tag">${p.tag||''}</span>
+          <h3 style="margin:8px 0 6px; font-weight:800">${p.title||''}</h3>
+          <p><em>${p.blurb||''}</em></p>
+        </div>
+      </a>`;
+  } else {
+    return `
+      <article class="card"${allowAttr} aria-label="${p.title||'Project'}">
+        <div class="cover"${allowAttr} style="background-image:url('${cover}')" title="${p.title||''}"></div>
+        <div class="inner"${allowAttr}>
+          <span class="tag">${p.tag||''}</span>
+          <h3 style="margin:8px 0 6px; font-weight:800">${p.title||''}</h3>
+          <p><em>${p.blurb||''}</em></p>
+        </div>
+      </article>`;
+  }
+}
+    grid.addEventListener('keydown', (e)=>{
+      const card = e.target.closest('.card[data-view-allowed]');
+      if (!card) return;
+      if ((e.key === 'Enter' || e.key === ' ') && card.onclick) {
+        e.preventDefault();
+        card.onclick();
+      }
+    });
+    function render(){ grid.innerHTML = (DATA.projects || []).map(cardTemplate).join(''); }
+
+    async function resolveEmmHref(){
+  const candidates = [
+    'emm.html#latest', 'emm.html#latest',
+    '/emm.html#latest', '/emm.html#latest'
+  ];
+  for (const u of candidates){
+    const test = u.replace('#latest','');
+    try{
+      const r = await fetch(test, { method:'HEAD', cache:'no-store' });
+      if (r.ok) return u;
+    }catch{}
+  }
+  return 'emm.html#latest';
+}
+
+
+    /* Customizer UI wiring (unchanged) */
+    const panel = document.getElementById('customizePanel');
+    const openBtn = document.getElementById('openCustomizer');
+    const closeBtn = document.getElementById('czClose');
+    const saveBtn = document.getElementById('czSave');
+    const resetBtn = document.getElementById('czReset');
+    const projInputsWrap = document.getElementById('projectInputs');
+    const bioUrlInput = document.getElementById('bioUrl');
+    const bioFileInput = document.getElementById('bioFile');
+    function togglePanel(show){ panel.classList.toggle('hidden', !show); }
+    openBtn.addEventListener('click', ()=>togglePanel(true));
+    closeBtn.addEventListener('click', ()=>togglePanel(false));
+    resetBtn.addEventListener('click', ()=>{
+      localStorage.removeItem('bio_photo');
+      if (DATA && DATA.projects){ DATA.projects.forEach(p=> localStorage.removeItem('project_cover_'+p.id)); }
+      bioUrlInput.value=''; document.querySelectorAll('.proj-url').forEach(i => { i.value = ''; });
+      render(); alert('All custom images cleared.');
+    });
+    function buildCustomizer(){
+      const existingBio = localStorage.getItem('bio_photo');
+      if (existingBio) bioUrlInput.value = existingBio;
+      projInputsWrap.innerHTML = '';
+      (DATA.projects||[]).forEach(p=>{
+        const existing = localStorage.getItem('project_cover_'+p.id) || p.cover || '';
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `
+          <strong style="min-width:140px">${p.title}</strong>
+          <input class="ft-input proj-url" type="url" placeholder="https://…/cover.jpg" data-pid="${p.id}" value="${existing?existing:''}" aria-label="${p.title} cover URL">
+          <input class="ft-input proj-file" type="file" accept="image/*" data-pid="${p.id}" aria-label="Upload ${p.title} cover">
+        `;
+        projInputsWrap.appendChild(row);
+      });
+    }
+    function readFileAsDataURL(file){
+      return new Promise((resolve,reject)=>{ const fr = new FileReader(); fr.onload = ()=> resolve(fr.result); fr.onerror = reject; fr.readAsDataURL(file); });
+    }
+    saveBtn.addEventListener('click', async ()=>{
+      try{
+        if (bioFileInput.files && bioFileInput.files[0]){
+          const dataUrl = await readFileAsDataURL(bioFileInput.files[0]);
+          localStorage.setItem('bio_photo', dataUrl); bioUrlInput.value = dataUrl;
+        } else if (bioUrlInput.value.trim()){
+          localStorage.setItem('bio_photo', bioUrlInput.value.trim());
+        }
+        const fileInputs = Array.from(document.querySelectorAll('.proj-file'));
+        const urlInputs  = Array.from(document.querySelectorAll('.proj-url'));
+        for (const finput of fileInputs){
+          const pid = finput.getAttribute('data-pid');
+          if (finput.files && finput.files[0]){
+            const dataUrl = await readFileAsDataURL(finput.files[0]);
+            localStorage.setItem('project_cover_'+pid, dataUrl);
+            const u = urlInputs.find(el=>el.getAttribute('data-pid')===pid);
+            if (u) u.value = dataUrl;
+          }
+        }
+        for (const uinput of urlInputs){
+          const pid = uinput.getAttribute('data-pid');
+          const val = uinput.value.trim();
+          if (val) localStorage.setItem('project_cover_'+pid, val);
+        }
+        render(); alert('Saved! Your custom images are now applied.'); togglePanel(false);
+      }catch(err){ console.error(err); alert('Oops—there was a problem saving your images.'); }
+    });
+
+    /* Single load() — fetch projects, resolve EMM path, render */
+    async function load(){
+      try{
+        const r = await fetch(API_PROJECTS,{cache:'no-store'});
+        if(!r.ok) throw new Error('no api');
+        DATA = await r.json();
+      }catch{ DATA = DEFAULTS; }
+
+      // Resolve a working newsletter URL (prevents 404s) and update card + navbar
+      const emmHref = await resolveEmmHref();
+const emmItem = (DATA.projects || []).find(p=>p.id==='emm');
+if (emmItem) emmItem.href = emmHref;
+const navEmm = document.getElementById('navEmm');
+if (navEmm) navEmm.setAttribute('href', emmHref);
+
+
+      buildCustomizer();
+      render();
+    }
+    load();
+  </script>
+
+  <script>
+    (function(){
+      const openBtn  = document.getElementById('openInquiry');
+      const dialog   = document.getElementById('inqDialog');
+      const closeBtn = document.getElementById('closeInq');
+      const sendBtn  = document.getElementById('sendInq');
+      const form     = document.getElementById('inqForm');
+      if (openBtn && dialog) openBtn.addEventListener('click', ()=> dialog.showModal());
+      if (closeBtn && dialog) closeBtn.addEventListener('click', ()=> dialog.close());
+      if (sendBtn && form && dialog){
+        sendBtn.addEventListener('click', ()=>{
+          const fd = new FormData(form);
+          const name  = (fd.get('name')||'').toString();
+          const email = (fd.get('email')||'').toString();
+          const topic = (fd.get('topic')||'').toString();
+          const msg   = (fd.get('message')||'').toString();
+          const to = dialog.dataset.toEmail || 'hello@example.com';
+          const subject = `Inquiry${topic ? ': ' + topic : ''} — from ${name}`;
+          const body = `Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${msg}\n\n— sent from Home page`;
+          const url = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+          window.location.href = url;
+          dialog.close();
+        });
+      }
+    })();
+  </script>
+<script>
+/* Normalizza href delle card a versione RELATIVA e con .html dove serve. 
+   Funziona sia se ha renderizzato lo script inline, sia se ha vinto dynamic-home.js. */
+(function normalizeProjectHrefs(){
+  function norm(h){
+    h = (h || '').trim();
+    // Porta URL assoluti a pathname+hash e togli gli slash iniziali
+    try { const u = new URL(h, location.href); h = (u.pathname + u.hash); } catch(e){}
+    h = h.replace(/^\/+/, '');
+
+    // Mappature intelligenti
+    if (/^(emm)(\/|$|#)/i.test(h) || /\/emm$/i.test(h)) return 'emm.html#latest';
+    if (/^(msb|msab)(\/|$|#)/i.test(h) || /\/msb$/i.test(h) || /\/msab$/i.test(h)) return 'msab.html';
+
+    // Se non ha estensione, aggiungi .html
+    if (!/\.(html?|pdf)$/i.test(h)) h = h + '.html';
+    return h;
+  }
+
+  function apply(){
+    // card grid
+    document.querySelectorAll('#projectGrid a.card').forEach(a=>{
+      a.setAttribute('href', norm(a.getAttribute('href')));
+      a.setAttribute('data-view-allowed',''); // harden contro viewer lock
+    });
+    // voce di navbar Newsletter
+    const navEmm = document.getElementById('navEmm');
+    if (navEmm) navEmm.setAttribute('href', norm(navEmm.getAttribute('href')||'emm.html#latest'));
+  }
+
+  // Applica una volta al DOM ready e riapplica subito dopo per coprire il re-render
+  document.addEventListener('DOMContentLoaded', ()=>{
+    apply();           // dopo il render inline
+    setTimeout(apply); // dopo eventuale override di dynamic-home.js
+  });
+})();
+</script>
+<script>
+(function(){
+  const btn = document.getElementById('navToggle');
+  const nav = document.getElementById('primaryNav');
+  if(!btn || !nav) return;
+
+  // Toggle apertura/chiusura
+  btn.addEventListener('click', ()=>{
+    const open = document.body.classList.toggle('nav-open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  // Assicura che l'hamburger NON si veda su desktop
+  const mq = matchMedia('(max-width:980px)');
+  const update = ()=>{ btn.style.display = mq.matches ? 'inline-flex' : 'none'; };
+  update(); mq.addEventListener('change', update);
+
+  // Compatibilità con il tuo "viewer"
+  try { btn.setAttribute('data-view-allowed',''); nav.querySelectorAll('a').forEach(a=>a.setAttribute('data-view-allowed','')); } catch(_){}
+})();
+</script>
+
+
+  <script type="module" src="assets/sb-init.js"></script>
+  <script type="module">
+  import { sb } from "./assets/sb-init.js";
+
+  // Chiede al volo l'ID/slug del progetto (es. "emm", "msb", "the-unstable-net")
+  async function setProjectCover(projectId, file){
+    if (!projectId) throw new Error("Inserisci un Project ID (slug).");
+    if (!file) throw new Error("Seleziona un file immagine.");
+
+    const ext  = (file.name.split('.').pop() || 'jpg').toLowerCase();
+    const path = `projects/${projectId}/cover-${Date.now()}.${ext}`;
+
+    // 1) Upload nel bucket 'public' (serve che esista ed abbia policy di read pubblica)
+    const { error: upErr } = await sb.storage.from('public').upload(path, file, { upsert:true });
+    if (upErr) throw upErr;
+
+    // 2) URL pubblica
+    const { data: { publicUrl } } = sb.storage.from('public').getPublicUrl(path);
+
+    // 3) Aggiorna il record del progetto
+    const { error: updErr } = await sb
+      .from('projects')
+      .update({ cover_url: publicUrl })
+      .eq('id', projectId);
+
+    if (updErr) throw updErr;
+  }
+
+  const fileInput = document.getElementById('coverInput');
+  const saveBtn   = document.getElementById('saveCover');
+
+  saveBtn?.addEventListener('click', async () => {
+    try{
+      const file = fileInput?.files?.[0];
+      const id   = prompt("Project ID (slug) es. 'emm' o 'msb':")?.trim();
+      await setProjectCover(id, file);
+      alert("Cover aggiornata! Ricarica la pagina per vederla.");
+    }catch(e){
+      alert(e?.message || e || "Errore inatteso");
+    }
+  });
+</script>
+  <script type="module" src="assets/dynamic-home.js"></script>
+  <script type="module" src="assets/editor-auth.js"></script>
+  <script type="module" src="assets/editor-tray.js"></script>
+  <script type="module" src="assets/editor-quiet.js"></script>
+  <script type="module" src="assets/editor-unlock.js"></script>
+<script type="module" src="assets/live-all-norepl.js"></script>
+</body></html>
